@@ -8,12 +8,19 @@
   op.cheopsr <- list(
     cheopsr.keyfile = "~/.ssh/id_rsa",
     cheopsr.username = "user",
-    cheopsr.libloc = "./R/3.3.3_intel_mkl"
+    cheopsr.libloc = "./R/3.3.3_intel_mkl",
+    cheopsr.module = "R/3.3.3_intel_mkl"
   )
   toset <- !(names(op.cheopsr) %in% names(op))
   if(any(toset)) options(op.cheopsr[toset])
 
 
   invisible()
-
 }
+
+
+#' cheopsr package'
+#'
+#' @docType package
+#' @name cheopsr
+NULL
