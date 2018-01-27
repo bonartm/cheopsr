@@ -62,7 +62,7 @@ cheops_create <- function(path){
 #'
 #' @examples
 cheops_install <- function(package, module){
-  cheops_sendscript("install.sh")
+  cheops_script("install.sh")
   module <- getOption("cheopsr.module")
   lib <- getOption("cheopsr.libloc")
   cheops_ssh(paste("./tmp/install.sh", module, lib, package))
@@ -86,7 +86,7 @@ cheops_script <- function(name){
 #'
 #' @examples
 cheops_install_github <- function(repo, ref){
-  cheops_sendscript("install_github.sh")
+  cheops_script("install_github.sh")
   module <- getOption("cheopsr.module")
   lib <- getOption("cheopsr.libloc")
   cheops_ssh(paste("./tmp/install_github.sh", module, lib, repo, ref))
