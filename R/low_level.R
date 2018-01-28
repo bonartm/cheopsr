@@ -6,6 +6,7 @@ cheops_script <- function(name){
   cheops_ssh(paste0("chmod +x ./tmp/", name))
 }
 
+
 cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
   cheops_ping()
   user <- getOption("cheopsr.username")
@@ -46,7 +47,7 @@ cheops_mkdir <- function(path){
 }
 
 cheops_parse <- function(jobname, list, account){
-  list <- c(list, output = paste0("./",jobname,"/log.out"), account = acccount)
+  list <- c(list, output = paste0("./",jobname,"/log.out"), account = account, "job-name" = jobname)
   vapply(seq_along(list), function(i){
     paste0("#SBATCH --",names(list)[i], "=", list[[i]])
   }, character(1))
@@ -57,8 +58,8 @@ cheops_gen <- function(jobname, list, module, account, lib){
   script <- c("#!/bin/bash -l",
               cheops_parse(jobname, list, account),
               paste("module load", module),
-              paste("export R_LIBS_USER=", lib),
-              paste0("mpirun -np 1 Rscript --vanilla ./", jobname, "/script.R"))
+              paste0("export R_LIBS_USER=", lib),
+              paste0("mpirun -q -np 1 Rscript --vanilla ./", jobname, "/script.R"))
   return(script)
 }
 

@@ -94,7 +94,8 @@ cheops_submit <- function(jobname, rscript, options,
   cheops_send(from, to)
   cheops_ssh(paste0("chmod +x ./",  jobname, "/job.sh"))
   cheops_send(rscript, paste0("./", jobname,"/", "script.R"))
-  job <- cheopsSSH(paste0("sbatch ", dir, "/job.sh"))
+  job <- cheops_ssh(paste0("sbatch ", jobname, "/job.sh"))
+  job <- gsub("Submitted batch job ", "", job)
   return(as.numeric(job))
 }
 
@@ -110,13 +111,47 @@ cheops_submit <- function(jobname, rscript, options,
 #'
 #' @return a named list of options
 #' @export
-cheops_slurmcontrol <- function(nodes, tasks, mem, time){
-  list(nodes = nodes,
+cheops_slurmcontrol <- function(nodes, tasks, mem, time, partition = NULL){
+  opt <- list(nodes = nodes,
        "ntasks-per-node" = tasks,
        mem = mem,
        time = time)
+  if(!is.null(partition)){
+    opt <- c(opt, partition = partition)
+  }
+  return(opt)
 }
 
+cheops_getlog <- function(jobname){
+  from <- paste0("./", jobname, "/log.out")
+  to <- tempfile()
+  tryCatch(
+    cheops_get(from, to),
+    warning = function(w) stop("File could not be found or other error.", call. = FALSE)
+
+  )
+  readLines(to)
+}
+
+cheops_readRDS <- function(file){
+  to <- tempfile(fileext = ".rds")
+  tryCatch(
+    cheops_get(from, to),
+    warning = function(w) stop("File could not be found or other error.", call. = FALSE)
+
+  )
+  readRDS(to)
+}
+
+cheops_readtable <- function(file, ...){
+  to <- tempfile(fileext = ".csv")
+  tryCatch(
+    cheops_get(from, to),
+    warning = function(w) stop("File could not be found or other error.", call. = FALSE)
+
+  )
+  read.table(to, ...)
+}
 
 
 

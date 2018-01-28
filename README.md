@@ -16,10 +16,32 @@ devtools::install_github("bonartm/cheopsr")
 ```R
 library(cheopsr)
 
-# set some minimal options
-options(cheopsr.username = <...>)
-options(cheopsr.key = <...>)
+# set some global options
+options(cheopsr.username = "...")
+options(cheopsr.account = "...")
 
-?cheopsr
+# prepare an R script
+script <- tempfile(fileext = ".R")
+exp <- expression({
+  library(Rmpi)
+  library(snow)
+  cl <- makeMPIcluster(mpi.universe.size()-1)
+  clusterEvalQ(cl, {
+    paste("I am",mpi.comm.rank(),"of",mpi.comm.size())
+  })
+  stopCluster(cl)
+  mpi.quit()
+})
+writeLines(as.character(exp), script)
 
+# install the snow package to run an MPI cluster
+cheops_install("snow")
+
+# define options and submit the job
+opt <- cheops_slurmcontrol(2, 8, "1gb", "00:00:20", partition = "devel")
+id <- cheops_submit("test", script, opt)
+cheops_jobs()
+
+# wait until job is finished and read log file
+cat(cheops_getlog("test"), sep = "\n")
 ````

@@ -4,7 +4,7 @@
 \alias{cheops_slurmcontrol}
 \title{Options for a SLURM task}
 \usage{
-cheops_slurmcontrol(nodes, tasks, mem, time)
+cheops_slurmcontrol(nodes, tasks, mem, time, partition = NULL)
 }
 \arguments{
 \item{nodes}{Number of nodes between 1 - 128}
