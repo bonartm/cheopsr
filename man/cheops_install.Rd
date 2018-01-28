@@ -2,13 +2,21 @@
 % Please edit documentation in R/ssh.R
 \name{cheops_install}
 \alias{cheops_install}
-\title{Title}
+\title{Install a package on the cluster}
 \usage{
-cheops_install(package, module)
+cheops_install(package, module = getOption("cheopsr.module"),
+  lib = getOption("cheopsr.libloc"))
 }
 \arguments{
-\item{module}{}
+\item{package}{name of the package as a character string}
+
+\item{module}{r module to be loaded}
+
+\item{lib}{lib location on the cluster}
+}
+\value{
+character vector of R console output
 }
 \description{
-Title
+Install a package on the cluster
 }

@@ -2,13 +2,29 @@
 % Please edit documentation in R/ssh.R
 \name{cheops_install_github}
 \alias{cheops_install_github}
-\title{Title}
+\title{Install a package from github on the cluster}
 \usage{
-cheops_install_github(repo, ref)
+cheops_install_github(repo, ref = "master",
+  module = getOption("cheopsr.module"), lib = getOption("cheopsr.libloc"))
 }
 \arguments{
-\item{ref}{}
+\item{repo}{name of the repository e.g. <user>/<reponame>}
+
+\item{ref}{name of the branch}
+
+\item{module}{r module to be loaded}
+
+\item{lib}{lib location on the cluster}
+}
+\value{
+character vector of R console output or error if ssh command failed or package name could not be found
 }
 \description{
-Title
+Install a package from github on the cluster
+}
+\details{
+the {\link[devtools]{devtools}} package has to be installed on the cluster
+}
+\seealso{
+{\link[devtools]{install_github}}
 }

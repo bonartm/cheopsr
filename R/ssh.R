@@ -1,25 +1,10 @@
-#' Title
+#' List all or R specific modules available on CHEOPS
 #'
-#' @return
+#' @param ronly a logical value indicating if only R specifig modules should be returned
+#'
+#' @return a vector of module names
 #' @export
-#'
-#' @examples
-cheops_ping <- function(){
-    tryCatch(system("ping cheops.rrz.uni-koeln.de -c 1 -w 1", intern = TRUE),
-             warning = function(w) stop("CHEOPS cluster is not responding - are you connected to the university network?", call. = FALSE))
-  invisible()
-}
-
-
-#' Title
-#'
-#' @param ronly
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cheops_module_avail <- function(ronly = TRUE){
+cheops_modules <- function(ronly = TRUE){
   modules <- cheops_ssh("module -t avail")
   modules <- modules[-grep("/opt", modules, fixed = TRUE)]
   if (ronly){
@@ -29,131 +14,45 @@ cheops_module_avail <- function(ronly = TRUE){
   }
 }
 
-# cheops_lib <- function(lib = getOption("cheopsr.libloc")){
-#   res <- tryCatch(
-#     cheops_ssh(paste("[ -d", lib, "]")),
-#     error = function(e) {
-#       message("new library folder is created")
-#       cheops_ssh(paste("mkdir", lib))
-#     }
-#   )
-#   return(TRUE)
-# }
-
-#' Title
+#' Install a package on the cluster
 #'
-#' @param path
+#' @param package name of the package as a character string
+#' @param module r module to be loaded
+#' @param lib lib location on the cluster
 #'
-#' @return
+#' @return character vector of R console output
 #' @export
-#'
-#' @examples
-cheops_create <- function(path){
-  cheops_ssh(paste("mkdir -p", path))
-}
-
-#' Title
-#'
-#' @param package
-#' @param module
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cheops_install <- function(package, module){
+cheops_install <- function(package,
+                           module = getOption("cheopsr.module"),
+                           lib = getOption("cheopsr.libloc")){
   cheops_script("install.sh")
-  module <- getOption("cheopsr.module")
-  lib <- getOption("cheopsr.libloc")
-  cheops_ssh(paste("./tmp/install.sh", module, lib, package))
+  out <- cheops_ssh(paste("./tmp/install.sh", module, lib, package), TRUE, TRUE)
+  return(out)
 }
 
-cheops_script <- function(name){
-  cheops_create("./tmp")
-  from <- system.file("bash", name, package = "cheopsr")
-  to <- paste0("./tmp/", name)
-  cheops_send(from, to)
-  cheops_ssh(paste0("chmod +x ./tmp/", name))
-}
-
-#' Title
+#' Install a package from github on the cluster
 #'
-#' @param repo
-#' @param ref
+#' @param repo name of the repository e.g. <user>/<reponame>
+#' @param ref name of the branch
+#' @param module r module to be loaded
+#' @param lib lib location on the cluster
 #'
-#' @return
+#' @return character vector of R console output or error if ssh command failed or package name could not be found
+#' @details the {\link[devtools]{devtools}} package has to be installed on the cluster
+#' @seealso {\link[devtools]{install_github}}
 #' @export
-#'
-#' @examples
-cheops_install_github <- function(repo, ref){
+cheops_install_github <- function(repo, ref = "master",
+                                  module = getOption("cheopsr.module"),
+                                  lib = getOption("cheopsr.libloc")){
   cheops_script("install_github.sh")
-  module <- getOption("cheopsr.module")
-  lib <- getOption("cheopsr.libloc")
-  cheops_ssh(paste("./tmp/install_github.sh", module, lib, repo, ref))
-}
-
-#' Title
-#'
-#' @param c
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cheops_ssh <- function(c){
-  cheops_ping()
-  user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
-  c <- paste0("-i ", key, " ", user, "@cheops.rrz.uni-koeln.de ", c)
-  tryCatch(
-    out <- system2("ssh", c, wait = TRUE, stdout = TRUE, stderr = TRUE),
-    warning = function(w) stop("ssh command failed", call. = FALSE),
-    error = function(e) stop("ssh command failed", call. = FALSE)
-  )
+  out <- cheops_ssh(paste("./tmp/install_github.sh", module, lib, repo, ref), TRUE, TRUE)
   out
 }
 
-#' Title
+#' List the users running SLURM jobs
 #'
-#' @param from
-#' @param to
-#'
-#' @return
+#' @return a table containing the currently running jobs
 #' @export
-#'
-#' @examples
-cheops_send <- function(from, to){
-  checkServer()
-  user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
-  c <- paste0("-i ", key," ", from," ", user, "@cheops.rrz.uni-koeln.de:", to)
-  system2("scp", c, stdout = TRUE, stderr = TRUE)
-}
-
-#' Title
-#'
-#' @param from
-#' @param to
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cheops_get <- function(from, to){
-  checkServer()
-  user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
-  c <- paste0("-i ", key," ", user, "@cheops.rrz.uni-koeln.de:", from, " ", to)
-  system2("scp", c, stdout = TRUE, stderr = TRUE)
-}
-
-
-#' Title
-#'
-#' @return
-#' @export
-#'
-#' @examples
 cheops_jobs <- function(){
   user <- getOption("cheopsr.username")
   res <- cheops_ssh(paste("squeue -u",user))
@@ -161,23 +60,63 @@ cheops_jobs <- function(){
   return(res)
 }
 
-# runJob <- function(keyfile, jobScript, rScript, dir = "./tmp"){
-#   name <- basename(rScript)
-#   to <- paste0(dir, "/", name)
-#   cheopsSSH(keyfile, paste0("rm -r -f ", dir))
-#   cheopsSSH(keyfile, paste0("mkdir ", dir))
-#   cheopsSendFile(keyfile, jobScript, paste0(dir, "/job.sh"))
-#   cheopsSendFile(keyfile, rScript, to)
-#   job <- cheopsSSH(keyfile, paste0("sbatch ", dir, "/job.sh"))
-#   cat(job, "\n")
-#   job <- as.numeric(gsub("Submitted batch job ", "", job))
-#   return(job)
-# }
-#
-# cancelJob <- function(keyfile, id){
-#   cheopsSSH(keyfile, paste0("scancel ", id))
-# }
-#
-# cancelAllJobs <- function(keyfile){
-#   lapply(checkJobs(keyfile)$JOBID, function(id) cancelJob(keyfile, id))
-# }
+#' Cancel a running SLURM job
+#'
+#' @param id the id of the job
+#'
+#' @return a table containing the currently running jobs
+#' @export
+cheops_cancel <- function(id){
+  cheops_ssh(paste0("scancel ", id))
+  cheops_jobs()
+}
+
+#' Submit a sbatch job to the cluster
+#'
+#' @param name name of the job
+#' @param rscript location of the r script file to be executed
+#' @param options named list of cluster options generated by {\link[cheopsr]{cheops_slurmcontrol}}
+#' @param module name of r module to be loaded
+#' @param account name of the account to be charged
+#' @param lib location of the r lib on the cluster
+#'
+#' @return a numeric job id
+#' @export
+cheops_submit <- function(jobname, rscript, options,
+                          module = getOption("cheopsr.module"),
+                          account = getOption("cheopsr.account"),
+                          lib = getOption("cheopsr.libloc")){
+  cheops_mkdir(paste0("./", jobname))
+  script <- cheops_gen(jobname, options, module, account, lib)
+  from <- tempfile(fileext = ".sh")
+  writeLines(script, from)
+  to <- paste0("./", jobname, "/job.sh")
+  cheops_send(from, to)
+  cheops_ssh(paste0("chmod +x ./",  jobname, "/job.sh"))
+  cheops_send(rscript, paste0("./", jobname,"/", "script.R"))
+  job <- cheopsSSH(paste0("sbatch ", dir, "/job.sh"))
+  return(as.numeric(job))
+}
+
+#' Options for a SLURM task
+#'
+#' @description
+#' Generates a list of options to be used in {\link[cheopsr]{cheops_submit}}
+#'
+#' @param nodes Number of nodes between 1 - 128
+#' @param tasks Number of tasks \strong{per} node
+#' @param mem Memory per node as a string (e.g. "4gb")
+#' @param time Wall time of the job in the format "hh:mm:ss"
+#'
+#' @return a named list of options
+#' @export
+cheops_slurmcontrol <- function(nodes, tasks, mem, time){
+  list(nodes = nodes,
+       "ntasks-per-node" = tasks,
+       mem = mem,
+       time = time)
+}
+
+
+
+
