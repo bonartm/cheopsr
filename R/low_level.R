@@ -10,7 +10,7 @@ cheops_script <- function(name){
 cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
   cheops_ping()
   user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
+  key <- getOption("cheopsr.key")
   c <- paste0("-i ", key, " ", user, "@cheops.rrz.uni-koeln.de ", c)
   tryCatch(
     out <- system2("ssh", c, wait = TRUE, stdout = stdout, stderr = stderr),
@@ -23,7 +23,7 @@ cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
 cheops_send <- function(from, to){
   cheops_ping()
   user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
+  key <- getOption("cheopsr.key")
   c <- paste0("-i ", key," ", from," ", user, "@cheops.rrz.uni-koeln.de:", to)
   system2("scp", c, stdout = TRUE, stderr = TRUE)
 }
@@ -31,7 +31,7 @@ cheops_send <- function(from, to){
 cheops_get <- function(from, to){
   cheops_ping()
   user <- getOption("cheopsr.username")
-  key <- getOption("cheopsr.keyfile")
+  key <- getOption("cheopsr.key")
   c <- paste0("-i ", key," ", user, "@cheops.rrz.uni-koeln.de:", from, " ", to)
   system2("scp", c, stdout = TRUE, stderr = TRUE)
 }
