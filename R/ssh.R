@@ -122,6 +122,14 @@ cheops_slurmcontrol <- function(nodes, tasks, mem, time, partition = NULL){
   return(opt)
 }
 
+
+
+#' Get a log file from a submitted job
+#'
+#' @param jobname the name of the job
+#'
+#' @return a raw character vector containing the lines of the log file
+#' @export
 cheops_getlog <- function(jobname){
   from <- paste0("./", jobname, "/log.out")
   to <- tempfile()
