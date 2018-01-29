@@ -7,8 +7,9 @@
 - check the status of your running jobs
 
 ## requirements
-- this first version is limited to unix since it uses `OpenSSH`
-- it is strongly advised to set up an `ssh` key-pair on the private machine and the cluster to avoid entering passwords manually all the time
+- you need a user account to use the CHEOPS cluster (see [here](https://rrzk.uni-koeln.de/hpc.html?&L=1)
+- this first version is limited to unix since it uses [OpenSSH](https://www.openssh.com/)
+- you have to set up an `ssh` key-pair on the private machine and the cluster to avoid entering passwords manually all the time
 
 ## installation
 ```R
@@ -22,9 +23,9 @@ library(cheopsr)
 ?cheopsr
 
 # set some global options
-options(cheopsr.username = "...")
-options(cheopsr.account = "...")
-options(cheopsr.key = "...")
+options(cheopsr.username = "...") # university username to log into the cluster
+options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
+options(cheopsr.key = "...") # location of the private key file defaults to "~/.ssh/id_rsa"
 
 # read in a test R script
 script <- system.file("R", "test.R", package = "cheopsr")
