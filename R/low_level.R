@@ -13,8 +13,8 @@ cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
   c <- paste0("-i ", key, " ", user, "@cheops.rrz.uni-koeln.de ", c)
   tryCatch(
     out <- system2("ssh", c, wait = TRUE, stdout = stdout, stderr = stderr),
-    warning = function(w) stop("ssh command failed", call. = FALSE),
-    error = function(e) stop("ssh command failed", call. = FALSE)
+    warning = function(w) stop("ssh command failed: ", w, call. = FALSE),
+    error = function(e) stop("ssh command failed: ", e, call. = FALSE)
   )
   out
 }
@@ -43,6 +43,10 @@ cheops_ping <- function(){
 
 cheops_mkdir <- function(path){
   cheops_ssh(paste("mkdir -p", path))
+}
+
+cheops_rm <- function(path){
+  cheops_ssh(paste("rm -r", path))
 }
 
 cheops_parse <- function(jobname, list, account){

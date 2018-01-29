@@ -22,15 +22,16 @@ cheops_modules <- function(ronly = TRUE){
 #' @param module r module to be loaded
 #' @param lib lib location on the cluster
 #'
-#' @return character vector of R console output
+#' @return nothing
 #' @export
 cheops_install <- function(package,
                            module = getOption("cheopsr.module"),
                            lib = getOption("cheopsr.libloc")){
   cheops_mkdir(lib)
   cheops_script("install.sh")
-  out <- cheops_ssh(paste("./tmp/install.sh", module, lib, package), TRUE, TRUE)
-  return(out)
+  out <- cheops_ssh(paste("./tmp/install.sh", module, lib, package), "", "")
+  cheops_rm("./tmp")
+  invisible()
 }
 
 #' Install a package from github on the cluster
@@ -42,7 +43,7 @@ cheops_install <- function(package,
 #' @param module r module to be loaded
 #' @param lib lib location on the cluster
 #'
-#' @return character vector of R console output or error if ssh command failed or package name could not be found
+#' @return nothing
 #' @details the {\link[devtools]{devtools}} package has to be installed on the cluster
 #' @seealso {\link[devtools]{install_github}}
 #' @export
@@ -51,8 +52,9 @@ cheops_install_github <- function(repo, ref = "master",
                                   lib = getOption("cheopsr.libloc")){
   cheops_mkdir(lib)
   cheops_script("install_github.sh")
-  out <- cheops_ssh(paste("./tmp/install_github.sh", module, lib, repo, ref), TRUE, TRUE)
-  out
+  out <- cheops_ssh(paste("./tmp/install_github.sh", module, lib, repo, ref), "", "")
+  cheops_rm("./tmp")
+  invisible()
 }
 
 #' List the users running SLURM jobs

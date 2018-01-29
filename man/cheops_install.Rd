@@ -15,7 +15,7 @@ cheops_install(package, module = getOption("cheopsr.module"),
 \item{lib}{lib location on the cluster}
 }
 \value{
-character vector of R console output
+nothing
 }
 \description{
 Install a package on the cluster

@@ -17,7 +17,7 @@ cheops_install_github(repo, ref = "master",
 \item{lib}{lib location on the cluster}
 }
 \value{
-character vector of R console output or error if ssh command failed or package name could not be found
+nothing
 }
 \description{
 Install a package from github on the cluster
