@@ -8,7 +8,7 @@
 
 ## requirements
 - this first version is limited to unix since it uses `OpenSSH`
-- it is advised to set up an `ssh` key-pair on the private machine and the cluster
+- it is strongly advised to set up an `ssh` key-pair on the private machine and the cluster to avoid entering passwords manually all the time
 
 ## installation
 ```R
