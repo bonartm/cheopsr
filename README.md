@@ -26,19 +26,8 @@ options(cheopsr.username = "...")
 options(cheopsr.account = "...")
 options(cheopsr.key = "...")
 
-# prepare an R script
-script <- tempfile(fileext = ".R")
-exp <- expression({
-  library(Rmpi)
-  library(snow)
-  cl <- makeMPIcluster(mpi.universe.size()-1)
-  clusterEvalQ(cl, {
-    paste("I am",mpi.comm.rank(),"of",mpi.comm.size())
-  })
-  stopCluster(cl)
-  mpi.quit()
-})
-writeLines(as.character(exp), script)
+# read in a test R script
+script <- system.file("R", "test.R", package = "cheopsr")
 
 # install the snow package to run an MPI cluster
 cheops_install("snow")
