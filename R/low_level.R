@@ -6,7 +6,6 @@ cheops_script <- function(name){
   cheops_ssh(paste0("chmod +x ./tmp/", name))
 }
 
-
 cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
   cheops_ping()
   user <- getOption("cheopsr.username")

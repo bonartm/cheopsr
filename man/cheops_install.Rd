@@ -20,3 +20,6 @@ character vector of R console output
 \description{
 Install a package on the cluster
 }
+\details{
+if the lib does not exist, a folder is created
+}

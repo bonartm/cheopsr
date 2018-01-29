@@ -1,7 +1,7 @@
 Package: cheopsr
 Type: Package
 Title: Talking to the Hight Performance CHEOPS Cluster at the University of Cologne
-Version: 0.1
+Version: 0.2
 Author@R: person("Malte", "Bonart", email = "bonartm@uni-koeln.de", role = c("aut", "cre"))
 Description: Various utility functions to talk to the CHEOPS cluster from within R. Send job files, scripts, data and collect the results. 
   Note that you must have a valid user account from the University of Cologne. This package heaviliy calls the ssh and scp command line programs. 

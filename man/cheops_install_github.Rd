@@ -23,6 +23,8 @@ character vector of R console output or error if ssh command failed or package n
 Install a package from github on the cluster
 }
 \details{
+if the lib does not exist, a folder is created
+
 the {\link[devtools]{devtools}} package has to be installed on the cluster
 }
 \seealso{
