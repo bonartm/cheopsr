@@ -6,6 +6,10 @@
 - submit and cancel jobs from within R (currently only MPI jobs are supported)
 - check the status of your running jobs
 
+## requirements
+- this first version is limited to unix since it uses `OpenSSH`
+- it is advised to set up an `ssh` key-pair on the private machine and the cluster
+
 ## installation
 ```R
 install.packages("devtools")
@@ -20,6 +24,7 @@ library(cheopsr)
 # set some global options
 options(cheopsr.username = "...")
 options(cheopsr.account = "...")
+options(cheopsr.key = "...")
 
 # prepare an R script
 script <- tempfile(fileext = ".R")
