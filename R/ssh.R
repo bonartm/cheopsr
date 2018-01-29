@@ -165,7 +165,7 @@ cheops_readRDS <- function(file){
 #' @param file location of the .txt or .csv file on the cluster
 #' @param ... additional arguments passed to {\link[utils]{read.table}}
 #'
-#' @return
+#' @return a data.frame
 #' @export
 cheops_readtable <- function(file, ...){
   to <- tempfile(fileext = ".txt")
