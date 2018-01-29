@@ -86,6 +86,7 @@ cheops_submit <- function(jobname, rscript, options,
                           module = getOption("cheopsr.module"),
                           account = getOption("cheopsr.account"),
                           lib = getOption("cheopsr.libloc")){
+
   cheops_mkdir(paste0("./", jobname))
   script <- cheops_gen(jobname, options, module, account, lib)
   from <- tempfile(fileext = ".sh")
@@ -93,6 +94,8 @@ cheops_submit <- function(jobname, rscript, options,
   to <- paste0("./", jobname, "/job.sh")
   cheops_send(from, to)
   cheops_ssh(paste0("chmod +x ./",  jobname, "/job.sh"))
+
+
   cheops_send(rscript, paste0("./", jobname,"/", "script.R"))
   job <- cheops_ssh(paste0("sbatch ", jobname, "/job.sh"))
   job <- gsub("Submitted batch job ", "", job)
@@ -141,6 +144,12 @@ cheops_getlog <- function(jobname){
   readLines(to)
 }
 
+#' Restore a single R Object from the cluster
+#'
+#' @param file location of the .rds file on the cluster
+#'
+#' @return the file
+#' @export
 cheops_readRDS <- function(file){
   to <- tempfile(fileext = ".rds")
   tryCatch(
@@ -151,14 +160,21 @@ cheops_readRDS <- function(file){
   readRDS(to)
 }
 
+#' Read in a table file from the cluster
+#'
+#' @param file location of the .txt or .csv file on the cluster
+#' @param ... additional arguments passed to {\link[utils]{read.table}}
+#'
+#' @return
+#' @export
 cheops_readtable <- function(file, ...){
-  to <- tempfile(fileext = ".csv")
+  to <- tempfile(fileext = ".txt")
   tryCatch(
     cheops_get(from, to),
     warning = function(w) stop("File could not be found or other error.", call. = FALSE)
 
   )
-  read.table(to, ...)
+  read.table(file = to, ...)
 }
 
 
