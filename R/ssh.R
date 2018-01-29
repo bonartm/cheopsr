@@ -153,7 +153,7 @@ cheops_getlog <- function(jobname){
 cheops_readRDS <- function(file){
   to <- tempfile(fileext = ".rds")
   tryCatch(
-    cheops_get(from, to),
+    cheops_get(file, to),
     warning = function(w) stop("File could not be found or other error.", call. = FALSE)
 
   )
@@ -170,7 +170,7 @@ cheops_readRDS <- function(file){
 cheops_readtable <- function(file, ...){
   to <- tempfile(fileext = ".txt")
   tryCatch(
-    cheops_get(from, to),
+    cheops_get(file, to),
     warning = function(w) stop("File could not be found or other error.", call. = FALSE)
 
   )
