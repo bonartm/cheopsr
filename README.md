@@ -1,4 +1,4 @@
-# cheopsr - talk to the cheops hpc cluster from within R
+# cheopsr - talk to the cheops hpc cluster in R
 
 ## features
 - set up an R library on the cluster and install packages via CRAN and github
