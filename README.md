@@ -7,9 +7,11 @@
 - check the status of your running jobs
 
 ## requirements
-- you need a [user account](https://rrzk.uni-koeln.de/hpc.html?&L=1) to use the CHEOPS cluster
-- this first version is limited to unix since it uses [OpenSSH](https://www.openssh.com/)
-- you have to set up an `ssh` key-pair on the private machine and the cluster to avoid entering passwords manually all the time
+- a [user account](https://rrzk.uni-koeln.de/hpc.html?&L=1) for the CHEOPS cluster
+- connection to the university network (e.g. via vpn)
+- a unix system (see [OpenSSH](https://www.openssh.com/users.html))
+- an `ssh` key-pair on the private machine and the cluster to avoid entering passwords manually all the time
+
 
 ## installation
 ```R
