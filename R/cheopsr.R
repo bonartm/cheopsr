@@ -1,6 +1,7 @@
 .onAttach <- function(libname, pkgname) {
   if (Sys.info()["sysname"] != "Linux")
     packageStartupMessage("The cheopsr package only works with a linux system.")
+
 }
 
 .onLoad <- function(libname, pkgname) {
@@ -14,8 +15,6 @@
   )
   toset <- !(names(op.cheopsr) %in% names(op))
   if(any(toset)) options(op.cheopsr[toset])
-
-
   invisible()
 }
 

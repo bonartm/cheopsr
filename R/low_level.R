@@ -1,9 +1,21 @@
 cheops_script <- function(name){
-  cheops_mkdir("./tmp")
   from <- system.file("bash", name, package = "cheopsr")
   to <- paste0("./tmp/", name)
+
+  cheops_mkdir("./tmp")
   cheops_send(from, to)
   cheops_ssh(paste0("chmod +x ./tmp/", name))
+}
+
+cheops_jobscript <- function(jobname, options, module, account, lib){
+  from <- tempfile(fileext = ".sh")
+  to <- paste0("./", jobname, "/job.sh")
+  script <- cheops_gen(jobname, options, module, account, lib)
+  writeLines(script, from)
+
+  cheops_mkdir(paste0("./", jobname))
+  cheops_send(from, to)
+  cheops_ssh(paste0("chmod +x ./", jobname, "/job.sh"))
 }
 
 cheops_ssh <- function(c, stdout = TRUE, stderr = TRUE){
@@ -27,8 +39,9 @@ cheops_send <- function(from, to){
   system2("scp", c, stdout = TRUE, stderr = TRUE)
 }
 
-cheops_get <- function(from, to){
-  cheops_ping()
+cheops_get <- function(from, to, ping = FALSE){
+  if (ping)
+    cheops_ping()
   user <- getOption("cheopsr.username")
   key <- getOption("cheopsr.key")
   c <- paste0("-i ", key," ", user, "@cheops.rrz.uni-koeln.de:", from, " ", to)
@@ -65,6 +78,8 @@ cheops_gen <- function(jobname, list, module, account, lib){
               paste0("mpirun -q -np 1 Rscript --vanilla ./", jobname, "/script.R"))
   return(script)
 }
+
+
 
 
 

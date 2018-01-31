@@ -1,0 +1,6 @@
+l <- readRDS("./tmp/lapply.rds")
+cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
+res <- do.call(parallel::parLapplyLB, c(list(cl = cl, X = l$x, fun = l$fun), l$args))
+saveRDS(res, "./tmp/res.rds")
+snow::stopCluster(cl)
+Rmpi::mpi.quit()
