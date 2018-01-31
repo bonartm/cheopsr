@@ -3,7 +3,8 @@
 ## features
 - set up an R library on the cluster and install packages via CRAN and github
 - send and receive files
-- submit and cancel jobs from within R (currently only MPI jobs are supported)
+- submit and cancel jobs from within R
+- currently only MPI jobs are supported
 - check the status of your running jobs
 
 ## requirements
@@ -24,6 +25,8 @@ devtools::install_github("bonartm/cheopsr")
 library(cheopsr)
 ?cheopsr
 
+# use the `Rmpi` package together with `cl <- makeMPIcluster(mpi.universe.size()-1)`
+
 # set some global options
 options(cheopsr.username = "...") # university username to log into the cluster
 options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
@@ -36,7 +39,7 @@ script <- system.file("R", "test.R", package = "cheopsr")
 cheops_install("snow")
 
 # define options and submit the job
-opt <- cheops_slurmcontrol(2, 8, "1gb", "00:00:20", partition = "devel")
+opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, "1gb", "00:00:20", partition = "devel")
 id <- cheops_submit("test", script, opt)
 cheops_jobs()
 
