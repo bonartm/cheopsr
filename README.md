@@ -28,9 +28,6 @@ library(cheopsr)
 # list available r modules, can be selected via options(cheopsr.module = "..")
 cheops_modules()
 
-
-# use the `Rmpi` package together with `cl <- makeMPIcluster(mpi.universe.size()-1)`
-
 # set some global options
 options(cheopsr.username = "...") # university username to log into the cluster
 options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
@@ -38,6 +35,8 @@ options(cheopsr.key = "...") # location of the private key file defaults to "~/.
 
 # read in a test R script
 script <- system.file("R", "test.R", package = "cheopsr")
+
+# when writing scripts use the `Rmpi` and the `snow` package and define a cluster with `cl <- makeMPIcluster(mpi.universe.size()-1)`
 
 # install the snow package to run an MPI cluster
 cheops_install("snow")
