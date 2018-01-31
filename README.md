@@ -25,6 +25,10 @@ devtools::install_github("bonartm/cheopsr")
 library(cheopsr)
 ?cheopsr
 
+# list available r modules, can be selected via options(cheopsr.module = "..")
+cheops_modules()
+
+
 # use the `Rmpi` package together with `cl <- makeMPIcluster(mpi.universe.size()-1)`
 
 # set some global options
