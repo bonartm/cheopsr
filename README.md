@@ -39,7 +39,7 @@ script <- system.file("R", "test.R", package = "cheopsr")
 cheops_install("snow")
 
 # define options and submit the job
-opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, "1gb", "00:00:20", partition = "devel")
+opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, mem = "1gb", time = "00:00:20", partition = "devel")
 id <- cheops_submit("test", script, opt)
 cheops_jobs()
 
