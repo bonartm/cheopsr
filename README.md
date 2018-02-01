@@ -3,8 +3,8 @@
 ## features
 - set up an R library on the cluster and install packages via CRAN and github
 - send and receive files
-- submit and cancel jobs from within R
-- currently only MPI jobs are supported
+- submit and cancel jobs from within R (currently only MPI jobs are supported)
+- call a parallel `lapply` function on the cluster without writing a script file
 - check the status of your running jobs
 
 ## requirements
@@ -18,15 +18,30 @@
 ```R
 install.packages("devtools")
 devtools::install_github("bonartm/cheopsr")
+?cheopsr
 ````
 
-## usage
+## call a parallel `lapply` function on the cluster
 ```R
 library(cheopsr)
-?cheopsr
 
-# list available r modules, can be selected via options(cheopsr.module = "..")
-cheops_modules()
+# set some global options
+options(cheopsr.username = "...") # university username to log into the cluster
+options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
+options(cheopsr.key = "...") # location of the private key file defaults to "~/.ssh/id_rsa"
+
+# define slurm options and submit the job
+opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, mem = "1gb", time = "00:00:20", partition = "devel")
+cheops_lapply(rep(100, 100), fun = rnorm, options = opt)
+cheops_jobs()
+
+# when job terminated, read in the result
+cheops_readRDS("./tmp/res.rds")
+```
+
+## execute a custom r script on the cluster
+```R
+library(cheopsr)
 
 # set some global options
 options(cheopsr.username = "...") # university username to log into the cluster
