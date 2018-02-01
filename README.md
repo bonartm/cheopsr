@@ -21,25 +21,7 @@ devtools::install_github("bonartm/cheopsr")
 ?cheopsr
 ````
 
-## call a parallel `lapply` function on the cluster
-```R
-library(cheopsr)
-
-# set some global options
-options(cheopsr.username = "...") # university username to log into the cluster
-options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
-options(cheopsr.key = "...") # location of the private key file defaults to "~/.ssh/id_rsa"
-
-# define slurm options and submit the job
-opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, mem = "1gb", time = "00:00:20", partition = "devel")
-cheops_lapply(rep(100, 100), fun = rnorm, options = opt)
-cheops_jobs()
-
-# when job terminated, read in the result
-cheops_readRDS("./tmp/res.rds")
-```
-
-## execute a custom r script on the cluster
+## usage
 ```R
 library(cheopsr)
 
