@@ -4,18 +4,22 @@ loadPackagesOnCluster <- function(cl, packages){
   all(unlist(res))
 }
 
+logger <- function(...){
+  cat("[", format(Sys.time()), "]", ..., "\n")
+}
+
 l <- readRDS("./tmp/lapply.rds")
 cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
 #cl <- snow::makeCluster(4)
 loadPackagesOnCluster(cl, l$packages)
 
-cat(format(Sys.time()), ": start calculation\n")
+logger("start calculation")
 
 res <- do.call(parallel::parLapplyLB, c(list(cl = cl, X = l$x, fun = l$fun), l$args))
 
 saveRDS(res, "./tmp/res.rds")
 
-cat(format(Sys.time()), ": finished calculation\n")
+logger("finished calculation")
 
 snow::stopCluster(cl)
 Rmpi::mpi.quit()
