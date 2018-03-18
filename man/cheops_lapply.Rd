@@ -26,14 +26,14 @@ cheops_lapply(x, fun, options, jobname, args = list(), packages = c(),
 \item{lib}{location of the r lib on the cluster}
 }
 \value{
-a named vector with the name and id of the job
+a named list with the name and id of the job and the file path on the cluster for the results
 }
 \description{
 Make a parallel load balancing lapply call on the cluster
 }
 \details{
 starts a slurm job on the cluster.
-after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS('./jobname/res.rds')}.
+after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS(<filepath>)}.
 }
 \seealso{
 {\link[parallel]{parLapplyLB}}
