@@ -30,19 +30,26 @@ options(cheopsr.username = "...") # university username to log into the cluster
 options(cheopsr.account = "...") # account which should be charged when submitting jobs defaults to "UniKoeln"
 options(cheopsr.key = "...") # location of the private key file defaults to "~/.ssh/id_rsa"
 
-# read in a test R script
-script <- system.file("R", "test.R", package = "cheopsr")
-
-# when writing scripts use the `Rmpi` and the `snow` package and define a cluster with `cl <- makeMPIcluster(mpi.universe.size()-1)`
-
-# install the snow package to run an MPI cluster
+# install the snow package and other packages you need on the cluster
 cheops_install("snow")
+
+# a template for a script file usning the MPI cluster can be found at:
+system.file("R", "test.R", package = "cheopsr")
 
 # define options and submit the job
 opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, mem = "1gb", time = "00:00:20", partition = "devel")
-id <- cheops_submit("test", script, opt)
+job <- cheops_lapply(rep(100, 1000), function(n){
+  mean(rnorm(n))
+}, options = opt, jobname = "clustertest")
+
 cheops_jobs()
 
-# wait until job is finished and read log file
-cat(cheops_getlog("test"), sep = "\n")
+# read the log file while job is running
+cat(cheops_getlog(job$name), sep = "\n")
+
+# wait until job is finished and get the results
+res <- cheops_readRDS(job$results)
+
+# visualize the result
+hist(unlist(res))
 ````
