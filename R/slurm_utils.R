@@ -56,8 +56,12 @@ cheops_jobs <- function(){
 #'
 #' @return a table containing the currently running jobs
 #' @export
-cheops_cancel <- function(id){
-  cheops_ssh(paste0("scancel ", id))
+cheops_cancel <- function(jobname){
+  jobs <- cheops_jobs()
+  ids <- jobs$JOBID[jobs$NAME == jobname]
+  for (id in ids){
+    cheops_ssh(paste0("scancel ", id))
+  }
   cheops_jobs()
 }
 

@@ -4,7 +4,7 @@
 \alias{cheops_cancel}
 \title{Cancel a running SLURM job}
 \usage{
-cheops_cancel(id)
+cheops_cancel(jobname)
 }
 \arguments{
 \item{id}{the id of the job}

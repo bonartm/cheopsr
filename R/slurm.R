@@ -34,20 +34,24 @@ cheops_submit <- function(jobname, rscript, options,
 #' @seealso {\link[parallel]{parLapplyLB}}
 #'
 #' @details starts a slurm job on the cluster.
-#' after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS('./tmp/res.rds')}.
+#' after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS('./jobname/res.rds')}.
 #'
-#' @return a numeric job id
+#' @return a named vector with the name and id of the job
 #' @export
-cheops_lapply <- function(x, fun, options,
+cheops_lapply <- function(x, fun, options, jobname,
                           args = list(),
                           packages = c(),
                           module = getOption("cheopsr.module"),
                           account = getOption("cheopsr.account"),
                           lib = getOption("cheopsr.libloc")){
-  cheops_mkdir("./tmp")
-  cheops_saveRDS(list(x = x, fun = fun, args = args, packages = packages), "./tmp/lapply.rds")
+  if(jobname %in% cheops_jobs()$NAME){
+    stop("job with this name allready exists.")
+  }
+  out <- paste0("./", jobname)
+  cheops_mkdir(out)
+  cheops_saveRDS(list(x = x, fun = fun, args = args, packages = packages, jobname = jobname), paste0(out, "/lapply.rds"))
   script <- system.file("R", "parLapply.R", package = "cheopsr")
-  id <- cheops_submit("tmp", script, options, module, account, lib)
-  cat("when job sucesfully terminated, call: <cheops_readRDS('./tmp/res.rds')>", "\n")
-  return(id)
+  id <- cheops_submit(jobname, script, options, module, account, lib)
+  cat("when job sucesfully terminated, call: <cheops_readRDS('./",jobname, "/res.rds')>", "\n", sep = "")
+  return(c(name = jobname, id = id))
 }

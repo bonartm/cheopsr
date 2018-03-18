@@ -4,7 +4,7 @@
 \alias{cheops_lapply}
 \title{Make a parallel load balancing lapply call on the cluster}
 \usage{
-cheops_lapply(x, fun, options, args = list(), packages = c(),
+cheops_lapply(x, fun, options, jobname, args = list(), packages = c(),
   module = getOption("cheopsr.module"),
   account = getOption("cheopsr.account"), lib = getOption("cheopsr.libloc"))
 }
@@ -26,14 +26,14 @@ cheops_lapply(x, fun, options, args = list(), packages = c(),
 \item{lib}{location of the r lib on the cluster}
 }
 \value{
-a numeric job id
+a named vector with the name and id of the job
 }
 \description{
 Make a parallel load balancing lapply call on the cluster
 }
 \details{
 starts a slurm job on the cluster.
-after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS('./tmp/res.rds')}.
+after the job is terminated, results have to be retrieved manually with the command: \code{cheops_readRDS('./jobname/res.rds')}.
 }
 \seealso{
 {\link[parallel]{parLapplyLB}}
