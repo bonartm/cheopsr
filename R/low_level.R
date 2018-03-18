@@ -70,14 +70,15 @@ cheops_parse <- function(jobname, list, account){
 }
 
 cheops_gen <- function(jobname, list, module, account, lib){
-  loc <- system.file("bash", "sbatch.sh", package = "cheopsr")
   script <- c("#!/bin/bash -l",
               cheops_parse(jobname, list, account),
               paste("module load", module),
               paste0("export R_LIBS_USER=", lib),
-              paste0("mpirun -q -np 1 Rscript --vanilla ./", jobname, "/script.R"))
+              paste0("mpirun -q -np 1 R --vanilla -f ./", jobname, "/script.R"))
   return(script)
 }
+
+
 
 
 

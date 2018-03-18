@@ -22,4 +22,6 @@ saveRDS(res, "./tmp/res.rds")
 logger("finished calculation")
 
 snow::stopCluster(cl)
-Rmpi::mpi.quit()
+Rmpi::mpi.exit()
+
+logger("cluster shutdown successful")
