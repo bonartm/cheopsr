@@ -13,6 +13,13 @@ cheops_submit <- function(jobname, rscript, options,
                           module = getOption("cheopsr.module"),
                           account = getOption("cheopsr.account"),
                           lib = getOption("cheopsr.libloc")){
+  if(nchar(jobname) > 8){
+    stop("jobname is too long. maximum is 8 chars.")
+  }
+
+  if(jobname %in% cheops_jobs()$NAME){
+    stop("job with this name allready exists.")
+  }
 
   cheops_jobscript(jobname, options, module, account, lib)
   cheops_send(rscript, paste0("./", jobname,"/", "script.R"))
@@ -44,9 +51,7 @@ cheops_lapply <- function(x, fun, options, jobname,
                           module = getOption("cheopsr.module"),
                           account = getOption("cheopsr.account"),
                           lib = getOption("cheopsr.libloc")){
-  if(jobname %in% cheops_jobs()$NAME){
-    stop("job with this name allready exists.")
-  }
+
   out <- paste0("./", jobname)
   cheops_mkdir(out)
   cheops_mkdir("./tmp")
