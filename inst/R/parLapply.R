@@ -17,7 +17,7 @@ cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
 loadPackagesOnCluster(cl, l$packages)
 
 logger("start calculation")
-res <- do.call(parallel::parLapplyLB, c(list(cl = cl, X = l$x, fun = l$fun), l$args))
+res <- do.call(clusterApplyLB, c(list(cl = cl, x = l$x, fun = l$fun), l$args))
 
 logger("save results")
 out <- paste0("./", l$jobname, "/res.rds")
