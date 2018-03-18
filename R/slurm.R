@@ -49,7 +49,7 @@ cheops_lapply <- function(x, fun, options, jobname,
   }
   out <- paste0("./", jobname)
   cheops_mkdir(out)
-  cheops_saveRDS(list(x = x, fun = fun, args = args, packages = packages, jobname = jobname), paste0(out, "/lapply.rds"))
+  cheops_saveRDS(list(x = x, fun = fun, args = args, packages = packages, jobname = jobname), "./tmp/lapply.rds")
   script <- system.file("R", "parLapply.R", package = "cheopsr")
   id <- cheops_submit(jobname, script, options, module, account, lib)
   results <- paste0("./",jobname, "/res.rds")
