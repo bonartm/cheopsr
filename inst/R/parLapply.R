@@ -1,3 +1,6 @@
+library(Rmpi)
+library(snow)
+
 loadPackagesOnCluster <- function(cl, packages){
   snow::clusterExport(cl, "packages", envir = environment())
   res <- snow::clusterEvalQ(cl, invisible(lapply(packages, library, character.only = TRUE, logical.return = TRUE)))
@@ -21,6 +24,6 @@ out <- paste0("./", l$jobname, "/res.rds")
 saveRDS(res, out)
 
 logger("stop cluster")
-snow::stopCluster(cl)
-Rmpi::mpi.exit()
+stopCluster(cl)
+mpi.exit()
 logger("end script")
