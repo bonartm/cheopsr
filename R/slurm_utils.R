@@ -18,7 +18,7 @@ cheops_slurmcontrol <- function(nodes, tasks, mem, time, partition = NULL, mail 
               mem = mem,
               time = time)
   if(!is.null(mail)){
-    opt <- c(opt, "mail-user" = mail)
+    opt <- c(opt, "mail-user" = mail, "mail-type" = "ALL")
   }
   if(!is.null(partition)){
     opt <- c(opt, partition = partition)
