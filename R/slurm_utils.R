@@ -7,14 +7,19 @@
 #' @param tasks Number of tasks \strong{per} node
 #' @param mem Memory per node as a string (e.g. "4gb")
 #' @param time Wall time of the job in the format "hh:mm:ss"
-#'
+#' @param partition On which partition the job should run
+#' @param mail University Cologne mail adress for job notifications
+#' #'
 #' @return a named list of options
 #' @export
-cheops_slurmcontrol <- function(nodes, tasks, mem, time, partition = NULL){
+cheops_slurmcontrol <- function(nodes, tasks, mem, time, partition = NULL, mail = NULL){
   opt <- list(nodes = nodes,
               "ntasks-per-node" = tasks,
               mem = mem,
               time = time)
+  if(!is.null(mail)){
+    opt <- c(opt, "mail-user" = mail)
+  }
   if(!is.null(partition)){
     opt <- c(opt, partition = partition)
   }

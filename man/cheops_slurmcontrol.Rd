@@ -4,7 +4,7 @@
 \alias{cheops_slurmcontrol}
 \title{Options for a SLURM task}
 \usage{
-cheops_slurmcontrol(nodes, tasks, mem, time, partition = NULL)
+cheops_slurmcontrol(nodes, tasks, mem, time, partition = NULL, mail = NULL)
 }
 \arguments{
 \item{nodes}{Number of nodes between 1 - 128}
@@ -14,6 +14,11 @@ cheops_slurmcontrol(nodes, tasks, mem, time, partition = NULL)
 \item{mem}{Memory per node as a string (e.g. "4gb")}
 
 \item{time}{Wall time of the job in the format "hh:mm:ss"}
+
+\item{partition}{On which partition the job should run}
+
+\item{mail}{University Cologne mail adress for job notifications
+#'}
 }
 \value{
 a named list of options
