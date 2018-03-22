@@ -5,7 +5,7 @@
 \title{Make a parallel load balancing lapply call on the cluster}
 \usage{
 cheops_lapply(x, fun, options, jobname, args = list(), packages = c(),
-  module = getOption("cheopsr.module"),
+  load.balancing = TRUE, module = getOption("cheopsr.module"),
   account = getOption("cheopsr.account"), lib = getOption("cheopsr.libloc"))
 }
 \arguments{
@@ -18,6 +18,8 @@ cheops_lapply(x, fun, options, jobname, args = list(), packages = c(),
 \item{args}{optionally a list of additional arguments passed to \code{fun} via {\link[base]{do.call}}}
 
 \item{packages}{character vector of package names to be loaded on the cluster}
+
+\item{load.balancing}{logical indicating if {\link[snow]{clusterApplyLB}} or \link{[snow]{clusterApply}} should be used}
 
 \item{module}{name of r module to be loaded}
 

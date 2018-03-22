@@ -16,9 +16,13 @@ l <- readRDS("./tmp/lapply.rds")
 cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
 loadPackagesOnCluster(cl, l$packages)
 
-logger("start calculation")
-res <- do.call(clusterApplyLB, c(list(cl = cl, x = l$x, fun = l$fun), l$args))
-
+if (l$load.balancing){
+  logger("start load balanced calculation")
+  res <- do.call(clusterApplyLB, c(list(cl = cl, x = l$x, fun = l$fun), l$args))
+} else {
+  logger("start calculation")
+  res <- do.call(clusterApply, c(list(cl = cl, x = l$x, fun = l$fun), l$args))
+}
 logger("save results")
 out <- paste0("./", l$jobname, "/res.rds")
 saveRDS(res, out)
