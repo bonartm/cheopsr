@@ -13,7 +13,7 @@ logger <- function(...){
 
 logger("initialize cluster")
 l <- readRDS("./tmp/lapply.rds")
-cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1, outfile = "")
+cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
 loadPackagesOnCluster(cl, l$packages)
 
 if (l$load.balancing){
