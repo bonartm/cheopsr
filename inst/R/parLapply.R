@@ -3,7 +3,7 @@ library(snow)
 
 loadPackagesOnCluster <- function(cl, packages){
   snow::clusterExport(cl, "packages", envir = environment())
-  res <- snow::clusterEvalQ(cl, invisible(lapply(packages, library, character.only = TRUE, logical.return = TRUE)))
+  res <- snow::clusterEvalQ(cl, invisible(lapply(packages, library, character.only = TRUE, logical.return = TRUE, quietly = TRUE)))
   all(unlist(res))
 }
 
@@ -13,7 +13,7 @@ logger <- function(...){
 
 logger("initialize cluster")
 l <- readRDS("./tmp/lapply.rds")
-cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
+cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1, outfile = "")
 loadPackagesOnCluster(cl, l$packages)
 
 if (l$load.balancing){
