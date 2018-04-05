@@ -12,7 +12,11 @@ logger <- function(...){
 }
 
 logger("initialize cluster")
-l <- readRDS("./tmp/run.rds")
+
+jobname <- acommandArgs(trailingOnly = TRUE)[1]
+
+l <- readRDS(paste0("./", jobname, "/run.rds"))
+
 cl <- snow::makeMPIcluster(Rmpi::mpi.universe.size()-1)
 loadPackagesOnCluster(cl, l$packages)
 

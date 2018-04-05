@@ -73,7 +73,7 @@ cheops_gen <- function(jobname, list, module, account, lib){
               cheops_parse(jobname, list, account),
               paste("module load", module),
               paste0("export R_LIBS_USER=", lib),
-              paste0("mpirun -q -np 1 R --vanilla --slave -f ./", jobname, "/script.R"))
+              paste0("mpirun -q -np 1 R --vanilla --slave -f ./", jobname, "/script.R  --args ", jobname))
   return(script)
 }
 
