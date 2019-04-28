@@ -51,13 +51,13 @@ cheops_jobs <- function(){
 
     res <- cheops_ssh(paste("squeue -u", user))
 
-  res <- read.table(textConnection(res), header = TRUE)
+  res <- utils::read.table(textConnection(res), header = TRUE)
   return(res)
 }
 
 #' Cancel a running SLURM job
 #'
-#' @param id the id of the job
+#' @param jobname name of the job
 #'
 #' @return a table containing the currently running jobs
 #' @export

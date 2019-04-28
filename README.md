@@ -34,7 +34,7 @@ options(cheopsr.key = "...") # location of the private key file defaults to "~/.
 cheops_install("snow")
 
 # a template for a script file usning the MPI cluster can be found at:
-system.file("R", "test.R", package = "cheopsr")
+system.file("examples", "test.R", package = "cheopsr")
 
 # define options and submit the job
 opt <- cheops_slurmcontrol(nodes = 2, tasks = 8, mem = "1gb", time = "00:00:20", partition = "devel")

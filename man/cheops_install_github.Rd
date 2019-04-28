@@ -5,7 +5,8 @@
 \title{Install a package from github on the cluster}
 \usage{
 cheops_install_github(repo, ref = "master",
-  module = getOption("cheopsr.module"), lib = getOption("cheopsr.libloc"))
+  module = getOption("cheopsr.module"),
+  lib = getOption("cheopsr.libloc"))
 }
 \arguments{
 \item{repo}{name of the repository e.g. <user>/<reponame>}

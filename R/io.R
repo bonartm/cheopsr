@@ -61,6 +61,6 @@ cheops_readtable <- function(file, ...){
     cheops_get(file, to),
     warning = function(w) stop("File could not be found or other error.", call. = FALSE)
   )
-  read.table(file = to, ...)
+  utils::read.table(file = to, ...)
 }
 

@@ -7,7 +7,7 @@
 cheops_cancel(jobname)
 }
 \arguments{
-\item{id}{the id of the job}
+\item{jobname}{name of the job}
 }
 \value{
 a table containing the currently running jobs
