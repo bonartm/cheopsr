@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/bonartm/cheopsr.svg?branch=master)](https://travis-ci.org/bonartm/cheopsr)
 # cheopsr - talk to the cheops hpc cluster in R
 
 ## features
